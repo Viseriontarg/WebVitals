@@ -1,18 +1,32 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { mockPageData } from './mockData';
+import { mockPageData, PageData } from './mockData.ts'; // Updated import path
 import './App.css';
+
+// --- Types ---
+type VitalName = 'lcp' | 'fid' | 'cls';
+
+interface VitalThresholds {
+  lcp: { good: number; poor: number };
+  fid: { good: number; poor: number };
+  cls: { good: number; poor: number };
+}
+
+interface SortConfig {
+  key: VitalName;
+  direction: 'ascending' | 'descending';
+}
 
 // --- Helper Functions ---
 
 // Define Web Vitals thresholds
-const VITAL_THRESHOLDS = {
+const VITAL_THRESHOLDS: VitalThresholds = {
   lcp: { good: 2500, poor: 4000 },
   fid: { good: 100, poor: 300 },
   cls: { good: 0.1, poor: 0.25 },
 };
 
 // Function to get the rating class (good, needs-improvement, poor)
-const getVitalClass = (vitalName, value) => {
+const getVitalClass = (vitalName: VitalName, value: number): string => {
   const { good, poor } = VITAL_THRESHOLDS[vitalName];
   if (value < good) return 'good';
   if (value < poor) return 'needs-improvement';
@@ -20,7 +34,7 @@ const getVitalClass = (vitalName, value) => {
 };
 
 // Function to get bar width for the details view chart
-const getBarWidthPercentage = (vitalName, value) => {
+const getBarWidthPercentage = (vitalName: VitalName, value: number): number => {
   // Use 1.5x the 'poor' threshold as a reasonable max for the bar
   const max = VITAL_THRESHOLDS[vitalName].poor * 1.5;
   const percentage = (value / max) * 100;
@@ -30,7 +44,13 @@ const getBarWidthPercentage = (vitalName, value) => {
 
 // --- React Components ---
 
-const VitalsTable = ({ pages, onRowClick, sortConfig }) => (
+interface VitalsTableProps {
+  pages: PageData[];
+  onRowClick: (page: PageData) => void;
+  sortConfig: SortConfig | null;
+}
+
+const VitalsTable: React.FC<VitalsTableProps> = ({ pages, onRowClick }) => (
   <table className="vitals-table">
     <thead>
       <tr>
@@ -59,15 +79,19 @@ const VitalsTable = ({ pages, onRowClick, sortConfig }) => (
   </table>
 );
 
-const PageDetails = ({ page }) => (
+interface PageDetailsProps {
+  page: PageData;
+}
+
+const PageDetails: React.FC<PageDetailsProps> = ({ page }) => (
   <div className="details-view">
     <h2>Details for {page.path}</h2>
     
     {Object.entries(page.vitals).map(([vitalName, value]) => {
-      const ratingClass = getVitalClass(vitalName, value);
-      const barWidth = getBarWidthPercentage(vitalName, value);
+      const ratingClass = getVitalClass(vitalName as VitalName, value as number);
+      const barWidth = getBarWidthPercentage(vitalName as VitalName, value as number);
       const unit = vitalName === 'cls' ? '' : ' ms';
-      const displayValue = vitalName === 'cls' ? value.toFixed(3) : value.toFixed(0);
+      const displayValue = vitalName === 'cls' ? (value as number).toFixed(3) : (value as number).toFixed(0);
 
       return (
         <div key={vitalName} className="vital-chart-container">
@@ -88,10 +112,10 @@ const PageDetails = ({ page }) => (
 );
 
 function App() {
-  const [pages, setPages] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedPage, setSelectedPage] = useState(null);
-  const [sortConfig, setSortConfig] = useState(null);
+  const [pages, setPages] = useState<PageData[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [selectedPage, setSelectedPage] = useState<PageData | null>(null);
+  const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
 
   // Simulate an API call to fetch data
   useEffect(() => {
@@ -121,15 +145,15 @@ function App() {
   }, [pages, sortConfig]);
 
   // Handler for sort button clicks
-  const requestSort = (key) => {
-    let direction = 'ascending';
+  const requestSort = (key: VitalName) => {
+    let direction: 'ascending' | 'descending' = 'ascending';
     if (sortConfig && sortConfig.key === key && sortConfig.direction === 'ascending') {
       direction = 'descending';
     }
     setSortConfig({ key, direction });
   };
 
-  const handleRowClick = (page) => {
+  const handleRowClick = (page: PageData) => {
     setSelectedPage(page);
   };
 
