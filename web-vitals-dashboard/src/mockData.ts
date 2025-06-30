@@ -1,8 +1,19 @@
+// --- Types ---
+export interface PageData {
+  id: number;
+  path: string;
+  vitals: {
+    lcp: number;
+    fid: number;
+    cls: number;
+  };
+}
+
 // Helper function to generate a random number within a range
-const getRandom = (min, max) => Math.random() * (max - min) + min;
+const getRandom = (min: number, max: number): number => Math.random() * (max - min) + min;
 
 // Generate 10 mock page objects
-const pages = Array.from({ length: 10 }, (_, i) => ({
+const pages: PageData[] = Array.from({ length: 10 }, (_, i) => ({
   id: i + 1,
   path: i === 0 ? '/' : `/products/${getRandom(1000, 9999).toFixed(0)}`,
   vitals: {
@@ -15,4 +26,4 @@ const pages = Array.from({ length: 10 }, (_, i) => ({
   },
 }));
 
-export const mockPageData = pages;
+export const mockPageData: PageData[] = pages;
