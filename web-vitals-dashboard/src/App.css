@@ -1,0 +1,140 @@
+.dashboard {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: var(--text-color);
+  margin-bottom: 30px;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--text-secondary-color);
+}
+
+.controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.controls button {
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--card-bg-color);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.controls button:hover {
+  background-color: #f9fafb;
+}
+
+.controls button.active {
+  background-color: var(--green);
+  color: white;
+  border-color: var(--green);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.vitals-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--card-bg-color);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.vitals-table th, .vitals-table td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.vitals-table th {
+  background-color: #f9fafb;
+  color: var(--text-secondary-color);
+  font-weight: 600;
+}
+
+.vitals-table tbody tr {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.vitals-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.vitals-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Color coding for vital values */
+.good { color: var(--green); }
+.needs-improvement { color: var(--yellow); }
+.poor { color: var(--red); }
+
+/* Details View */
+.details-view {
+  margin-top: 30px;
+  padding: 24px;
+  background-color: var(--card-bg-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.details-view h2 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  word-break: break-all;
+}
+
+.vital-chart-container {
+  margin-bottom: 20px;
+}
+
+.vital-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.vital-label .value {
+  font-weight: 400;
+  color: var(--text-secondary-color);
+}
+
+.bar-background {
+  width: 100%;
+  height: 20px;
+  background-color: var(--bg-color);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.bar-value {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.5s ease-in-out;
+}
+
+/* Bar colors based on vital rating */
+.bar-value.good { background-color: var(--green); }
+.bar-value.needs-improvement { background-color: var(--yellow); }
+.bar-value.poor { background-color: var(--red); }
